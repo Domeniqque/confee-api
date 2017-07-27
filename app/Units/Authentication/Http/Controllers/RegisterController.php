@@ -1,9 +1,9 @@
 <?php
 
-namespace Confee\Http\Controllers\Auth;
+namespace Confee\Units\Http\Controllers;
 
 use Confee\User;
-use Confee\Http\Controllers\Controller;
+use Confee\Support\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
