@@ -1,0 +1,60 @@
+# v2 syntax
+version: '2'
+
+# Named volumes
+volumes:
+  # MySQL Data
+  confee_api-mysql-data:
+    driver: local
+
+  # Redis Data
+  confee_api-redis-data:
+    driver: local
+
+services:
+  # MySQL (5.7)
+  mysql:
+    image: ambientum/mysql:5.7
+    container_name: confee_api-mysql
+    volumes:
+      - confee_api-mysql-data:/var/lib/mysql
+    ports:
+      - "3333:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=confee_api
+      - MYSQL_DATABASE=confee_api
+      - MYSQL_USER=confee_api
+      - MYSQL_PASSWORD=confee_api
+
+  # Redis
+  cache:
+    image: ambientum/redis:3.2
+    container_name: confee_api-redis
+    command: --appendonly yes
+    volumes:
+      - confee_api-redis-data:/data
+    ports:
+      - "6379:6379"
+
+  # PHP (with Nginx)
+  app:
+    image: ambientum/php:7.1-nginx
+    container_name: confee_api-app
+    volumes:
+      - .:/var/www/app
+    ports:
+      - "88:8080"
+    links:
+      - mysql
+      - cache
+
+  # Laravel Queues
+  queue:
+    image: ambientum/php:7.0
+    container_name: confee_api-queue
+    command: php artisan queue:listen
+    volumes:
+      - .:/var/www/app
+    links:
+      - mysql
+      - cache
