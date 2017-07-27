@@ -167,6 +167,12 @@ return [
          * Package Service Providers...
          */
         Laravel\Tinker\TinkerServiceProvider::class,
+        Migrator\MigrationServiceProvider::class,
+
+        /**
+         * Domains Service Provider...
+         */
+        Confee\Domains\Users\Database\Providers\DomainServiceProvider::class,
 
         /*
          * Application Service Providers...
